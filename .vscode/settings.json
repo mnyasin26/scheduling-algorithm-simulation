@@ -3,6 +3,7 @@
         "queue": "c",
         "header.h": "c",
         "stdio.h": "c",
-        "prioschedulingnonpreemptive.h": "c"
+        "prioschedulingnonpreemptive.h": "c",
+        "utility": "c"
     }
 }

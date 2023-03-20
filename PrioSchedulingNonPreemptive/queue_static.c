@@ -128,6 +128,8 @@ void printQueue(queue Q)
             printf("priority : %d\n", Q.data[i].priority);
             printf("arrival time : %d\n", Q.data[i].arrivalTime);
             printf("burst time : %d\n", Q.data[i].burstTime);
+            printf("wait time : %d\n", Q.data[i].waitTime);
+            printf("turn around time : %d\n", Q.data[i].turnAroundTime);
         }
         printf("---------------------\n");
     }

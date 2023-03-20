@@ -4,10 +4,12 @@
 typedef struct
 {
     int pid; // stands for process id
+    int priority;
     int arrivalTime;
     int burstTime;
     int burstTimeLeft;
-    int priority;
+    int waitTime;
+    int turnAroundTime;
 } process;
 
 typedef struct
