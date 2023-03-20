@@ -1,6 +1,11 @@
-#include "header.h"
+#include "SJFNonPreemptive.h"
 
 void SJFNonPreemptive()
 {
-    printf("Hello, world");
+    
 }
+
+void showStrenghtandWeaknesses(){
+    
+}
+
