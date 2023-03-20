@@ -4,18 +4,18 @@
 typedef struct
 {
     int pid; // stands for process id
-    int priority;
+    int priority; // prioritas proses
     int arrivalTime;
     int burstTime;
-    int burstTimeLeft;
+    int burstTimeLeft; // burst time left digunakan untuk kegiatan eksekusi
     int waitTime;
     int turnAroundTime;
 } process;
 
 typedef struct
 {
-    int systemTime; // stands for process id
-    int state; // 0 means "running", 1 means "available"
+    int systemTime; // stands for real system time
+    int state;      // 0 means "running", 1 means "available"
 } processor;
 
 typedef struct
@@ -36,4 +36,5 @@ process popHighestPriority(queue *Q);
 process popDel(int index, queue *Q);
 
 // simulation functions
-void simulation();
+void simulation(processor *executor, queue *listProcess);
+void executeProcess(process *p, processor *executor, queue *q);
