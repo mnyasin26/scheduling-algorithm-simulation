@@ -1,6 +1,6 @@
 #include "header.h"
 
-#define timeDelay 1800
+#define timeDelay 500
 int pilihan = 0;
 
 // untuk membuat animasi bisa menggunakan 2 function system("cls") dan Sleep(ms seconds)
@@ -15,13 +15,13 @@ int main(){
         printf("\n1. FCFS");
         printf("\n2. SJF Preemptive");
         printf("\n3. SJF Non-Preemptive");
-        printf("\n5. Round Robin");
-        printf("\n6. Priority Scheduling Preemptive");
-        printf("\n7. Priority Scheduling Non-Preemptive");
-        printf("\n8. Exit");
+        printf("\n4. Round Robin");
+        printf("\n5. Priority Scheduling Preemptive");
+        printf("\n6. Priority Scheduling Non-Preemptive");
+        printf("\n7. Exit");
         printf("\n\nInput pilihan menu: ");
         scanf("%d", &pilihan);
-        if (pilihan == 8)
+        if (pilihan == 7)
         {
             break;
         }
@@ -36,6 +36,8 @@ int main(){
         Sleep(timeDelay);
         system("cls");
         printf("Initializing ...\n");
+        Sleep(timeDelay);
+        system("cls");
     
         switch (pilihan)
         {

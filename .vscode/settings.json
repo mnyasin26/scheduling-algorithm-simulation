@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "queue": "c",
+        "header.h": "c",
+        "stdio.h": "c",
+        "prioschedulingnonpreemptive.h": "c"
+    }
+}
