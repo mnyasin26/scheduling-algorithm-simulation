@@ -6,9 +6,20 @@ void PrioSchedulingNonPreemptive(){
     simulation();
 }
 
+int checkProcess(processor *executor, queue *q){
+    for (int i = q->first; i <= q->last; i++)
+    {
+        if (executor->systemTime >= q->data[i].arrivalTime)
+        {
+            return 1;
+        }
+    }
+}
+
 // TODO layout formatting
 void executeProcess(process *p, processor *executor, queue *q, queue *processDone){
     while(p->burstTimeLeft > 0){
+        Sleep(1000);
         printf("*time: %d executing process P%d time left = %d\n", executor->systemTime, p->pid, p->burstTimeLeft);
         executor->systemTime++;
         p->burstTimeLeft--;
@@ -16,7 +27,6 @@ void executeProcess(process *p, processor *executor, queue *q, queue *processDon
 
         if (isEmpty(*q) == 0)
         {
-            int state = 0;
             for (int i = q->first; i <= q->last; i++)
             {
                 if (executor->systemTime >= q->data[i].arrivalTime)
@@ -24,24 +34,23 @@ void executeProcess(process *p, processor *executor, queue *q, queue *processDon
                     // printf("time: %d in queue: P%d wait time = %d turn around time = %d\n", executor->systemTime, q->data[i].pid, q->data[i].waitTime, q->data[i].turnAroundTime);
                     q->data[i].waitTime++;
                     q->data[i].turnAroundTime++;
-                    state = 1;
                 }
             }
 
-            while (state == 0)
-            {
-                // printf("time: %d\n", executor->systemTime, p->pid);
-                executor->systemTime++;
-                for (int i = q->first; i <= q->last; i++)
-                {
-                    // printf("test\n");
-                    if (executor->systemTime >= q->data[i].arrivalTime)
-                    {
-                        state = 1;
-                        break;
-                    }
-                }
-            }
+            // while (state == 0)
+            // {
+            //     // printf("time: %d\n", executor->systemTime, p->pid);
+            //     executor->systemTime++;
+            //     for (int i = q->first; i <= q->last; i++)
+            //     {
+            //         // printf("test\n");
+            //         if (executor->systemTime >= q->data[i].arrivalTime)
+            //         {
+            //             state = 1;
+            //             break;
+            //         }
+            //     }
+            // }
         }
     
         
@@ -58,23 +67,73 @@ void simulation()
     processor executor = {executor.systemTime = 0, executor.state = 1};
 
     process p0 = {p0.pid = 0, p0.priority = 2, p0.arrivalTime = 0, p0.burstTime = 2, p0.burstTimeLeft = 0, p0.waitTime = 0, p0.turnAroundTime = 0};
-    process p1 = {p1.pid = 1, p1.priority = 3, p1.arrivalTime = 1, p1.burstTime = 6, p1.burstTimeLeft = 0, p1.waitTime = 0, p1.turnAroundTime = 0};
-    process p2 = {p2.pid = 2, p2.priority = 1, p2.arrivalTime = 2, p2.burstTime = 4, p2.burstTimeLeft = 0, p2.waitTime = 0, p2.turnAroundTime = 0};
+    process p1 = {p1.pid = 1, p1.priority = 3, p1.arrivalTime = 10, p1.burstTime = 6, p1.burstTimeLeft = 0, p1.waitTime = 0, p1.turnAroundTime = 0};
+    process p2 = {p2.pid = 2, p2.priority = 1, p2.arrivalTime = 24, p2.burstTime = 4, p2.burstTimeLeft = 0, p2.waitTime = 0, p2.turnAroundTime = 0};
 
     p0.burstTimeLeft = p0.burstTime;
     p1.burstTimeLeft = p1.burstTime;
     p2.burstTimeLeft = p2.burstTime;
 
-    add(p0, &q);
-    add(p1, &q);
-    add(p2, &q);
+    queue listProcess;
+    createEmpty(&listProcess);
+    
+    add(p0, &listProcess);
+    add(p1, &listProcess);
+    add(p2, &listProcess);
 
-    while (isEmpty(q) == 0)
+    printQueue(listProcess);
+
+    int jumlahProcess = 3;
+    int state = 0;
+    while (state == 0)
     {
-        process temp = popHighestPriority(&q);
-        executeProcess(&temp,&executor,&q, &processDone);
-        add(temp, &processDone);
+        process temp;
+        for (int i = listProcess.first; i <= listProcess.last; i++)
+        {
+            if (executor.systemTime >= listProcess.data[i].arrivalTime)
+            {
+                temp = popDel(i, &listProcess);
+                add(temp, &q);
+                printf("process P%d arrived\n", temp.pid);
+            }
+        }
+        if (isEmpty(q) == 0)
+        {
+            temp = popHighestPriority(&q);
+            executeProcess(&temp,&executor,&q,&processDone);
+            add(temp, &processDone);
+        }
+        else
+        {
+            Sleep(1000);
+            printf("*time: %d no process is executed\n", executor.systemTime);
+        }
+
+        if (isEmpty(listProcess) == 1 && isEmpty(q) == 1)
+        {
+            state = 1;
+        }
+        
+
+        executor.systemTime++;
     }
+    
+
+    // add(p0, &q);
+    // add(p1, &q);
+    // add(p2, &q);
+
+
+
+    // while (isEmpty(q) == 0)
+    // {
+    //     while (checkProcess(&executor, &q) != 1)
+    //     {
+    //         executor.systemTime++;
+    //     }
+    //     executeProcess(&temp,&executor,&q,&processDone);
+    //     add(temp, &processDone);
+    // }
 
 
     printf("================\n");

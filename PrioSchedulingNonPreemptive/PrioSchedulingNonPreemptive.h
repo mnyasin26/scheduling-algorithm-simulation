@@ -33,6 +33,7 @@ void add(process p, queue *Q);
 void del(queue *Q);
 void printQueue(queue Q);
 process popHighestPriority(queue *Q);
+process popDel(int index, queue *Q);
 
 // simulation functions
 void simulation();

@@ -70,6 +70,40 @@ void del(queue *Q)
     }
 }
 
+process popDel(int index, queue *Q)
+{
+    if (Q->first != -1)
+    {
+        process temp;
+
+        if (Q->last == 0)
+        {
+            Q->first = -1;
+            Q->last = -1;
+            temp = Q->data[0];
+        }
+        else
+        {
+            int i;
+            temp = Q->data[index];
+            if (index != Q->last)
+            {
+                for (i = index; i < Q->last; i++)
+                {
+                    Q->data[i] = Q->data[i + 1];
+                }
+            }
+            Q->last = Q->last - 1;
+        }
+        return temp;
+    }
+    else
+    {
+        // proses jika stack kosong
+        printf("queue kosong\n");
+    }
+};
+
 process popHighestPriority(queue *Q){
     if (Q->first != -1)
     {
