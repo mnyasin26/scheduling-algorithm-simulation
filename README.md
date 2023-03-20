@@ -1,3 +1,3 @@
 # scheduling-algorithm-simulation
-untuk membuat program "gcc *.c -o run.exe"
+untuk membuat program jalankan build.bat
 untuk menjalankan program "run.exe"
