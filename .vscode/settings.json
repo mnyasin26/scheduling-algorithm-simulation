@@ -1,10 +1,13 @@
 {
     "files.associations": {
+        "*.embeddedhtml": "html",
+        "*.rmd": "markdown",
         "queue": "c",
         "header.h": "c",
         "stdio.h": "c",
         "prioschedulingnonpreemptive.h": "c",
         "utility": "c",
-        "time.h": "c"
+        "time.h": "c",
+        "string.h": "c"
     }
 }
