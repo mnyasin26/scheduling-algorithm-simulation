@@ -2,15 +2,13 @@
 
 int main(){
 
-    process test;
-    test.process_id = 1;
-    test.burst_time = 10;
-    test.waiting_time = 15;
-    test.arrival_time =100;
+    process arr[1];
+    arr[0].process_id = 1;
+    arr[0].burst_time = 10;
+    arr[0].waiting_time = 15;
+    arr[0].arrival_time =100;
 
-    process arr[1] = {test};
-
-    printTableForProcesses(arr);
+    printTableForProcesses(arr, 1);
 
     return 0;
 }
