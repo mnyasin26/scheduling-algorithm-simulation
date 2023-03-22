@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../header.h"
+#include "header.h"
 #include <malloc.h>
 
 void printTable(char **colname, process prosesses[]);

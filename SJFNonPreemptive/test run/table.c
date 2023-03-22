@@ -46,21 +46,21 @@ void printTableForProcesses(process *processes){
 
         itoa(processes[i].burst_time, temp, 5);
         printf("| ");
-        printf("%d", processes[i].burst_time);
+        printf("%s", temp);
         for(int j = 0 ; j < max_col_len[i] - strlen(temp) + 1; i++){
             printf(" ");
         }
 
         itoa(processes[i].arrival_time, temp, 5);
         printf("| ");
-        printf("%d", processes[i].arrival_time);
+        printf("%s", temp);
         for(int j = 0 ; j < max_col_len[i] - strlen(temp) + 1; i++){
             printf(" ");
         }
 
         itoa(processes[i].waiting_time, temp, 5);
         printf("| ");
-        printf("%d", processes[i].waiting_time);
+        printf("%s", temp);
         for(int j = 0 ; j < max_col_len[i] - strlen(temp) + 1; i++){
             printf(" ");
         }
@@ -72,7 +72,7 @@ void printTableForProcesses(process *processes){
 
 void printTableLine(int *max_col_len){
 
-    for(int i = 0 ; i < sizeof(max_col_len) / sizeof(max_col_len[0]); i++){
+    for(int i = 0 ; i < (int)sizeof(max_col_len) / sizeof(max_col_len[0]); i++){
         printf("+");
         for(int j = 0 ; j < max_col_len[i] + 2; j++){
             printf("-");

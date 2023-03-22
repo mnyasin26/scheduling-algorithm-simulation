@@ -8,6 +8,7 @@
         "prioschedulingnonpreemptive.h": "c",
         "utility": "c",
         "time.h": "c",
-        "string.h": "c"
+        "string.h": "c",
+        "table.h": "c"
     }
 }

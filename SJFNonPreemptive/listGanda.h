@@ -1,13 +1,12 @@
-#include "header.h"
+#pragma once
+
+#include "../header.h"
 #include <malloc.h>
-#include "SJFNonPreemptive.h"
 
 #define listVar int burst_time, int arrival_time
 
 #define data1 burst_time
 #define data2 arrival_time
-
-
 
 typedef struct elemnt *elementAddress;
 typedef struct elemnt
