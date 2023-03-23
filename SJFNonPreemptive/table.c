@@ -1,25 +1,105 @@
 #include "table.h"
 
-void printTable(char **colname, process prosesses[]){
+void createTable(char **col_names, int n_col, table *T){
+    T->colnames = col_names;
+    T->n_col = n_col;
+    T->max_col_len = (int*)calloc(T->n_col, sizeof(int));
 
-    int n_col = sizeof(colname) / sizeof(colname[0]);
-    int* max_col_len = (int*)calloc(n_col, sizeof(int));
-
-    for(int i = 0; i < n_col; i++){
-        /**
-         * @brief 
-         * not dynamic table for now, too lazy
-         */
-        max_col_len[i] = strlen(colname[i]);
+    for(int i = 0 ; i < T->n_col; i++){
+        T->max_col_len[i] = strlen(col_names[i]);
     }
 
-    printTableLine(max_col_len, n_col);
-    for(int i = 0; i < n_col; i++){
-        printf("| ");
-        printf("");
+    T->firstRow = NULL;
+    T->lastRow = NULL;
+
+}
+
+void addRow(char **values, table *T){
+    row *new = (row*) malloc (sizeof(row));
+    new->row_value = values;
+    new->nextRow = NULL;
+    if(T->firstRow == NULL){
+        T->firstRow = new;
+        T->lastRow = new;
     }
+    else{
+        T->lastRow->nextRow = new;
+        T->lastRow = new;
+    }
+    new = NULL;
+}
 
+void delRow(table *T){
+    
+    if (T->firstRow != NULL){
 
+        row *del = T->lastRow;
+
+        if(T->firstRow == del){
+            T->firstRow = T->lastRow = NULL;
+        }
+        else{
+            row* ptr = T->firstRow;
+            while(ptr->nextRow != del){
+                ptr = ptr->nextRow;
+            }
+            ptr->nextRow = NULL;
+            T->lastRow = ptr;
+            free(ptr);
+        }
+
+        free(del);
+    }
+}
+
+void delAllRow(table *T){
+
+    while(T->firstRow != NULL){
+        delRow(T);
+    }
+}
+
+void updateMaxColLen(table *T){
+
+    for(int i = 0 ; i < T->n_col; i++){
+        row* ptr = T->firstRow;
+        while(ptr != NULL){
+            if(T->max_col_len[i] < strlen(ptr->row_value[i])){
+                T->max_col_len[i] = strlen(ptr->row_value[i]);
+            }
+            ptr = ptr->nextRow;
+        }
+    }
+}
+
+void printTable(table *T){
+    
+    if(T->firstRow != NULL){
+        updateMaxColLen(T);
+        printTableLine(T->max_col_len, T->n_col);
+        for(int i = 0 ; i < T->n_col; i++){
+            printf("| %s ", T->colnames[i]);
+            for(int j = 0 ; j < T->max_col_len[i] - strlen(T->colnames[i]); j++){
+                printf(" ");
+            }
+        }
+        printf("|\n");
+        printTableLine(T->max_col_len, T->n_col);
+
+        row *ptr = T->firstRow;
+        while(ptr != NULL){
+            for(int i = 0; i < T->n_col; i++){
+                printf("| %s ",ptr->row_value[i]);
+                for(int j = 0 ; j < T->max_col_len[i] - strlen(ptr->row_value[i]); j++){
+                    printf(" ");
+                }
+            }
+            printf("|\n");
+            ptr = ptr->nextRow;
+        }
+        free(ptr);
+        printTableLine(T->max_col_len, T->n_col);
+    }
 }
 
 void printTableForProcesses(process *processes, int n_processes){

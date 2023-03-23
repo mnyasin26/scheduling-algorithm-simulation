@@ -250,13 +250,13 @@ void delAll (list *L){
         }
     }
 }
-
+/*
 void printElement (list L){
 
     if (L.first != NULL){
 
         element* pointer = L.first;
-        /*--------*/
+        
 
         printf("===================\n");
         while ( pointer != NULL){
@@ -294,7 +294,7 @@ void printElementRev(list L){
         printf("List Kosong\n");
     }
 }
-/*
+
 void containerSwap (datas *a, datas *b){
     datas temp = *a;
     *a = *b;
