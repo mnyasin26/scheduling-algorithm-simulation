@@ -126,7 +126,7 @@ void addLast (process proses, list *L){
 void addSortByBurstTime(process proses, int methode, list *L){
 
     if(L->first == NULL){
-        addFirst_process(proses, L);
+        addFirst(proses, L);
     }
     else if(L->first == L->tail){
         if(methode == 0){
@@ -185,7 +185,7 @@ void addSortByBurstTime(process proses, int methode, list *L){
 void addSortByArrivalTime(process proses, int methode, list *L){
 
     if(L->first == NULL){
-        addFirst_process(proses, L);
+        addFirst(proses, L);
     }
     else if(L->first == L->tail){
         if(methode == 0){
@@ -429,13 +429,18 @@ int getShortestBurstTime(list L){
 void updateWaitingTimeForAllElement(int delta_waiting_time, list *L){
 
     if(L->first != NULL){
-        element* front_ptr = L->first;
-        element* back_ptr = L->tail;
-        while((front_ptr != back_ptr) && (front_ptr->prev != back_ptr)){
-            front_ptr->container.waiting_time += delta_waiting_time;
-            back_ptr->container.waiting_time += delta_waiting_time;
-            front_ptr = front_ptr->next;
-            back_ptr = back_ptr->prev;
+        if(L->first == L->tail){
+            L->first->container.waiting_time += delta_waiting_time;
+        }
+        else{
+            element* front_ptr = L->first;
+            element* back_ptr = L->tail;
+            while((front_ptr != back_ptr) && (front_ptr->prev != back_ptr)){
+                front_ptr->container.waiting_time += delta_waiting_time;
+                back_ptr->container.waiting_time += delta_waiting_time;
+                front_ptr = front_ptr->next;
+                back_ptr = back_ptr->prev;
+            }
         }
     }
 }

@@ -1,15 +1,15 @@
 
 #include "SJFNonPreemptive.h"
 
-void insert_sjf_process(list *L){
+void insert_sjf_Process(int* n,list *L){
     int n_process;
     printf("Masukkan jumlah process\n");
     scanf("%d", &n_process);
     process input;
     for(int i = 0 ; i < n_process; i++){
-        printf("Masukkan burst-time dan arrival-time proses ke-%d", i+1);
-        scanf("burst-time  : %d", &input.burst_time);
-        scanf("arrival-time: %d", &input.arrival_time);
+        printf("Masukkan burst-time dan arrival-time proses ke-%d\n", i+1);
+        printf("burst-time: "); scanf("%d", &input.burst_time);
+        printf("arrival-time: "); scanf("%d", &input.arrival_time);
         input.process_id = i+1;
         input.waiting_time = 0;
         input.turnaround_time = 0;
@@ -21,6 +21,7 @@ void insert_sjf_process(list *L){
             addSortByArrivalTime(input, 0, L);
         }
     }
+    *n = n_process;
 }
 
 void sort_processes(process** processes, int num_processes) {
@@ -40,17 +41,15 @@ void sort_processes(process** processes, int num_processes) {
 void simulate_sjf_process_execution(list p, int n_process){
 
     int time_tracker = 0;
-    process* cur_process = NULL;
+    element* cur_process = NULL;
     list processes_list = p;
     list ready_queue;
     list finished_queque;
     createList(&ready_queue);
     createList(&finished_queque);
 
-    table outputTable;
-
     while(countElement(finished_queque) != n_process){
-        sleep(1000);
+        Sleep(1000);
         time_tracker++;
         printf("Time:  %d\n", time_tracker);
 
@@ -66,41 +65,53 @@ void simulate_sjf_process_execution(list p, int n_process){
             cur_process = popFirst(&ready_queue);
         }
         else{
-            if(cur_process->burst_time != 0) cur_process->burst_time -= 1;
+            if(cur_process->container.burst_time > 0) cur_process->container.burst_time -= 1;
             else{
-                cur_process->turnaround_time = time_tracker - cur_process->arrival_time;
-                addLast((*cur_process), &finished_queque);
+                cur_process->container.turnaround_time = time_tracker - cur_process->container.arrival_time;
+                addLast(cur_process->container, &finished_queque);
                 cur_process = NULL;
             }
         }
 
         if(cur_process != NULL){
             char cur_table_col[2][25] = {"Current process", "Remaining burst time"};
-            char ptr_cur_table[2];
+            char* ptr_cur_table[2];
+
             char temp_val[5];
             char cur_table_val[2][5];
-            char ptr_cur_table_val[2];
+            char* ptr_cur_table_val[2];
+
             for(int i = 0 ; i < 2; i++){
                 ptr_cur_table[i] = cur_table_col[i];
-                strcpy(cur_table_val, itoa(cur_process->process_id, temp_val, 5));
+                strcpy(cur_table_val[i], itoa(cur_process->container.process_id, temp_val, 5));
                 ptr_cur_table_val[i] = cur_table_val[i]; 
             }
-            createTable(ptr_cur_table, 2, &outputTable);
-            addRow(cur_table_val, &outputTable);
-            printTable(&outputTable);
+            table cur_pro_table;
+            createTable(ptr_cur_table, 2, &cur_pro_table);
+            addRow(ptr_cur_table_val, &cur_pro_table);
+            printTable(&cur_pro_table);
         }
-
-        delAllRow(&outputTable);
+        //
+        // problems starts here
+        //
         printf("\nProses dalam ready\n");
-        createProsessTable(ready_queue, &outputTable);
-        printTable(&outputTable);
+        if(isEmpty(ready_queue) == 0){
+            table ready_table;
+            createProsessTable(ready_queue, &ready_table);
+            printTable(&ready_table);
+        }
+        else{
+            printf("Queue sedang kosong\n");
+        }
 
         printf("\nProses yang sudah selesai\n");
-        if(isEmpty(finished_queque) == 0) printf("belum ada proses yang selesai");
+        if(isEmpty(finished_queque) == 1) printf("belum ada proses yang selesai\n");
         else{
-            createProsessTable(finished_queque, &outputTable);
-            printTable(&outputTable);
+            table finished_table;
+            createProsessTable(finished_queque, &finished_table);
+            printTable(&finished_table);
         }
+        printf("\n");
 
         updateWaitingTimeForAllElement(1, &ready_queue);
     }

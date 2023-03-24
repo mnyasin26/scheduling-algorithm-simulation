@@ -1,6 +1,7 @@
 #pragma once
 
 #include "header.h"
+#include "listGanda.h"
 #include <malloc.h>
 
 typedef struct rw *rowAddress;
@@ -26,6 +27,8 @@ typedef struct{
  * @param T the address of the table;
  */
 void createTable(char **col_names, int n_col, table *T);
+
+void createProsessTable(list L, table *T);
 
 /**
  * @brief Insert a row to the table
@@ -53,6 +56,15 @@ void delRow(table *T);
 void delAllRow(table *T);
 
 /**
+ * @brief Reset a table to a fresh state
+ * 
+ * @param col_names 
+ * @param n_col 
+ * @param T 
+ */
+void resetTable(char **col_names, int n_col, table *T);
+
+/**
  * @brief Function to update the longest string
  * in each collumn.
  * @attention better treat it just like a private method
@@ -67,8 +79,6 @@ void updateMaxColLen(table *T);
  * @param T the address of the table
  */
 void printTable(table *T);
-
-void printTableForProcesses(process *Processes, int n_processes);
 
 /**
  * @brief printing the seperator line of the table

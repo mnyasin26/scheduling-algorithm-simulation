@@ -59,6 +59,17 @@ void delAllRow(table *T){
     }
 }
 
+void resetTable(char **col_names, int n_col, table *T){
+    delAllRow(T);
+    T->colnames = col_names;
+    T->n_col = n_col;
+    T->max_col_len = (int*)calloc(T->n_col, sizeof(int));
+
+    for(int i = 0 ; i < T->n_col; i++){
+        T->max_col_len[i] = strlen(col_names[i]);
+    }
+}
+
 void updateMaxColLen(table *T){
 
     for(int i = 0 ; i < T->n_col; i++){
@@ -69,6 +80,39 @@ void updateMaxColLen(table *T){
             }
             ptr = ptr->nextRow;
         }
+    }
+}
+
+void createProsessTable(list L, table *T){
+    char col_names[4][20] = {"Prossess ID", "Burst Time", "Arrival Time", "Waiting Time"};
+    int n_col = 4;
+    char* ptr_col_names[4];
+    for(int i = 0 ; i < 4; i++){
+        ptr_col_names[i] = col_names[i];
+    }
+    createTable(ptr_col_names, n_col, T);
+
+    element* ptr = L.first;
+    while(ptr != NULL){
+        char temp[5];
+        char val[4][5];
+        char* ptr_val[4];
+
+        itoa(ptr->container.process_id, temp, 5);
+        strcpy(val[0], temp);
+
+        itoa(ptr->container.burst_time, temp, 5);
+        strcpy(val[1], temp);
+
+        itoa(ptr->container.arrival_time, temp, 5);
+        strcpy(val[2], temp);
+
+        itoa(ptr->container.waiting_time, temp, 5);
+        strcpy(val[3], temp);
+
+        for(int i = 0; i < 4; i++) ptr_val[i] = val[i];
+        addRow(ptr_val, T);
+        ptr = ptr->next;
     }
 }
 
@@ -102,7 +146,7 @@ void printTable(table *T){
     }
 }
 
-void printTableForProcesses(process *processes, int n_processes){
+void printTableForProcesses(list L){
     char arr[4][15] = {"Prossess ID", "Burst Time", "Arrival Time", "Waiting Time"};
     int max_col_len[4] = {strlen(arr[0]), strlen(arr[1]), strlen(arr[2]), strlen(arr[3])};
     int n_col = (int) sizeof(max_col_len) / sizeof(max_col_len[0]);
@@ -115,37 +159,6 @@ void printTableForProcesses(process *processes, int n_processes){
     printf("|\n");
     printTableLine(max_col_len, n_col);
 
-    for(int i = 0; i < n_processes; i++){
-        char temp[5];
-        itoa(processes[i].process_id, temp, 5);
-        printf("| ");
-        printf("%s", temp);
-        for(int j = 0 ; j < max_col_len[0] - strlen(temp) + 1; j++){
-            printf(" ");
-        }
-
-        itoa(processes[i].burst_time, temp, 5);
-        printf("| ");
-        printf("%s", temp);
-        for(int j = 0 ; j < max_col_len[1] - strlen(temp) + 1; j++){
-            printf(" ");
-        }
-
-        itoa(processes[i].arrival_time, temp, 5);
-        printf("| ");
-        printf("%s", temp);
-        for(int j = 0 ; j < max_col_len[2] - strlen(temp) + 1; j++){
-            printf(" ");
-        }
-
-        itoa(processes[i].waiting_time, temp, 5);
-        printf("| ");
-        printf("%s", temp);
-        for(int j = 0 ; j < max_col_len[3] - strlen(temp) + 1; j++){
-            printf(" ");
-        }
-        printf("|\n");
-    }
     printTableLine(max_col_len, n_col);
 
 }

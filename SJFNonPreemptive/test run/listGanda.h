@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../header.h"
+#include "header.h"
 #include <malloc.h>
 
 typedef struct elemnt *elementAddress;
