@@ -20,3 +20,5 @@ void insert_sjf_Process(list *L);
 void sort_processes(process** processes, int num_processes);
 
 void simulate_sjf_process_execution(list p, int n_process);
+
+void showStatistic(list processes, int time);

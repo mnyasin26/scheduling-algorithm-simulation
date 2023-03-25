@@ -127,6 +127,56 @@ void simulate_sjf_process_execution(list p, int n_process){
         updateWaitingTimeForAllElement(1, &ready_queue);
     }
 
-    
+}
 
+void showStatistic(list processes, int time){
+
+    table T;
+    list L;
+
+    char colnames[3][25] = {
+        "Average Turn Around Time",
+        "Average Wait Time",
+        "Throughput"
+    };
+    char* ptr_colnames[3];
+    for(int i = 0 ; i < 3; i++){
+        ptr_colnames[i] = colnames[i];
+    }
+
+    createTable(ptr_colnames, 4,&T);
+
+    L = processes;
+    int n_process = 0;
+    int turn_around_time = 0;
+    int wait_time = 0;
+    while(isEmpty(L) == 0){
+        process temp = popFirst(&L)->container;
+        n_process++;
+        turn_around_time += temp.turnaround_time;
+        wait_time += temp.waiting_time;
+    }
+
+    double thoughput = n_process / time;
+
+    char row_val[3][5];
+    char* ptr_row_val[3];
+    for(int i = 0 ; i < 3 ; i++){
+        ptr_row_val[i] = row_val[i];
+    }
+
+    char temp[5];
+    itoa(turn_around_time, temp, 4);
+    strcpy(row_val[0], temp);
+
+    itoa(wait_time, temp, 4);
+    strcpy(row_val[2], temp);
+
+    itoa(thoughput, temp, 4);
+    strcpy(row_val[3], temp);
+
+    addRow(ptr_row_val, &T);
+    
+    printTable(&T);
+    
 }
