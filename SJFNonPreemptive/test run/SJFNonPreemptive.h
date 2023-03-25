@@ -6,7 +6,9 @@
 #include "listGanda.h"
 #include "table.h"
 
-void insert_sjf_Process(int* n, list *L);
+void showUpAndDownside();
+
+void insert_sjf_Process(list *L);
 
 /**
  * @brief mengurutkan array of processes

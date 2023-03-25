@@ -1,8 +1,15 @@
 #include "table.h"
 
 void createTable(char **col_names, int n_col, table *T){
-    T->colnames = col_names;
     T->n_col = n_col;
+
+    T->colnames = malloc(T->n_col * sizeof(char*));
+    for(int i = 0; i < T->n_col; i++){
+        T->colnames[i] = malloc((strlen(col_names[i]) + 1) * sizeof(char));
+        strcpy(T->colnames[i], col_names[i]);
+    }
+
+
     T->max_col_len = (int*)calloc(T->n_col, sizeof(int));
 
     for(int i = 0 ; i < T->n_col; i++){
@@ -16,7 +23,12 @@ void createTable(char **col_names, int n_col, table *T){
 
 void addRow(char **values, table *T){
     row *new = (row*) malloc (sizeof(row));
-    new->row_value = values;
+    new->row_value = malloc(T->n_col * sizeof(char*));
+    for(int i = 0 ; i < T->n_col; i++){
+        new->row_value[i] = malloc((strlen(values[i]) + 1) * sizeof(char));
+        strcpy(new->row_value[i], values[i]);
+    }
+
     new->nextRow = NULL;
     if(T->firstRow == NULL){
         T->firstRow = new;
@@ -84,17 +96,17 @@ void updateMaxColLen(table *T){
 }
 
 void createProsessTable(list L, table *T){
-    char col_names[4][15] = {"Prossess ID", "Burst Time", "Arrival Time", "Waiting Time"};
-    T->n_col = 4;
+    char col_names[4][20] = {"Prossess ID", "Burst Time", "Arrival Time", "Waiting Time"};
+    int n_col = 4;
     char* ptr_col_names[4];
     for(int i = 0 ; i < 4; i++){
         ptr_col_names[i] = col_names[i];
     }
-    T->colnames = ptr_col_names;
-    T->firstRow = T->lastRow = NULL;
+    createTable(ptr_col_names, n_col, T);
+
     element* ptr = L.first;
     while(ptr != NULL){
-        char temp;
+        char temp[5];
         char val[4][5];
         char* ptr_val[4];
 
@@ -112,6 +124,7 @@ void createProsessTable(list L, table *T){
 
         for(int i = 0; i < 4; i++) ptr_val[i] = val[i];
         addRow(ptr_val, T);
+        ptr = ptr->next;
     }
 }
 

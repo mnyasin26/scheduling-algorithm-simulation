@@ -1,6 +1,28 @@
 
 #include "SJFNonPreemptive.h"
 
+void showUpAndDownside(){
+
+    table T;
+    char colnames[2][100] = {"Kelebihan", "Kekurangan"};
+    char* ptr_colnames[2];
+    for(int i = 0 ; i < 2; i++){
+        ptr_colnames[i] = colnames[i];
+    }
+    createTable(ptr_colnames, 2, &T);
+
+    // reuse colnames as row values;
+    strcpy(colnames[0], "Rata-rata waiting time paling minimum");
+    strcpy(colnames[1], "Dapat terjadi kelaparan (starvation)");
+    addRow(ptr_colnames, &T);
+
+    strcpy(colnames[0], "diantara seluruh algoritma penjadwalan");
+    strcpy(colnames[1], "bila proses lebih pendek terus berdatangan");
+    addRow(ptr_colnames, &T);
+
+    printTable(&T);
+}
+
 void insert_sjf_process(list *L){
     int n_process;
     printf("Masukkan jumlah process\n");
@@ -40,7 +62,7 @@ void sort_processes(process** processes, int num_processes) {
 void simulate_sjf_process_execution(list p, int n_process){
 
     int time_tracker = 0;
-    process* cur_process = NULL;
+    element* cur_process = NULL;
     list processes_list = p;
     list ready_queue;
     list finished_queque;
@@ -50,7 +72,7 @@ void simulate_sjf_process_execution(list p, int n_process){
     table outputTable;
 
     while(countElement(finished_queque) != n_process){
-        sleep(1000);
+        Sleep(1000);
         time_tracker++;
         printf("Time:  %d\n", time_tracker);
 
@@ -66,27 +88,27 @@ void simulate_sjf_process_execution(list p, int n_process){
             cur_process = popFirst(&ready_queue);
         }
         else{
-            if(cur_process->burst_time != 0) cur_process->burst_time -= 1;
+            if(cur_process->container.burst_time != 0) cur_process->container.burst_time -= 1;
             else{
-                cur_process->turnaround_time = time_tracker - cur_process->arrival_time;
-                addLast((*cur_process), &finished_queque);
+                cur_process->container.turnaround_time = time_tracker - cur_process->container.arrival_time;
+                addLast(cur_process->container, &finished_queque);
                 cur_process = NULL;
             }
         }
 
         if(cur_process != NULL){
             char cur_table_col[2][25] = {"Current process", "Remaining burst time"};
-            char ptr_cur_table[2];
+            char* ptr_cur_table[2];
             char temp_val[5];
             char cur_table_val[2][5];
-            char ptr_cur_table_val[2];
+            char* ptr_cur_table_val[2];
             for(int i = 0 ; i < 2; i++){
                 ptr_cur_table[i] = cur_table_col[i];
-                strcpy(cur_table_val, itoa(cur_process->process_id, temp_val, 5));
+                strcpy(cur_table_val[i], itoa(cur_process->container.process_id, temp_val, 5));
                 ptr_cur_table_val[i] = cur_table_val[i]; 
             }
             createTable(ptr_cur_table, 2, &outputTable);
-            addRow(cur_table_val, &outputTable);
+            addRow(ptr_cur_table_val, &outputTable);
             printTable(&outputTable);
         }
 
