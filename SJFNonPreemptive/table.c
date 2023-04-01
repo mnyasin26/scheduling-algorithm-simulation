@@ -64,6 +64,32 @@ void delRow(table *T){
     }
 }
 
+void delRowByID(table *T, const char* id)
+{
+
+    if (T->firstRow != NULL)
+    {
+
+        if (strcmp(T->firstRow->row_value[0], id) == 0 && (T->firstRow == T->lastRow))
+        {
+            T->firstRow = T->lastRow = NULL;
+        }
+        else
+        {
+            row *ptr = T->firstRow;
+            while (strcmp(ptr->nextRow->row_value[0], id) != 0 && (T->firstRow != T->lastRow))
+            {
+                ptr = ptr->nextRow;
+            }
+            ptr->nextRow = NULL;
+            T->lastRow = ptr;
+            free(ptr);
+        }
+
+        // free(del);
+    }
+}
+
 void delAllRow(table *T){
 
     while(T->firstRow != NULL){

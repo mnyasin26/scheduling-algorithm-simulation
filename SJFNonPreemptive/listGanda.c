@@ -26,7 +26,7 @@ int countElement(list L){
     return result;
 }
 
-int isEmpty(list L){
+int isEmptyList(list L){
     int result = 1;
 
     if(L.first != NULL){
@@ -126,7 +126,7 @@ void addLast (process proses, list *L){
 void addSortByBurstTime(process proses, int methode, list *L){
 
     if(L->first == NULL){
-        addFirst_process(proses, L);
+        addFirst(proses, L);
     }
     else if(L->first == L->tail){
         if(methode == 0){
@@ -185,7 +185,7 @@ void addSortByBurstTime(process proses, int methode, list *L){
 void addSortByArrivalTime(process proses, int methode, list *L){
 
     if(L->first == NULL){
-        addFirst_process(proses, L);
+        addFirst(proses, L);
     }
     else if(L->first == L->tail){
         if(methode == 0){

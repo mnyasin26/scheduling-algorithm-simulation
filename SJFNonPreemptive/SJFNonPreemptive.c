@@ -118,7 +118,7 @@ void simulate_sjf_process_execution(list p, int n_process){
         printTable(&outputTable);
 
         printf("\nProses yang sudah selesai\n");
-        if(isEmpty(finished_queque) == 0) printf("belum ada proses yang selesai");
+        if(isEmptyList(finished_queque) == 0) printf("belum ada proses yang selesai");
         else{
             createProsessTable(finished_queque, &outputTable);
             printTable(&outputTable);
@@ -152,7 +152,7 @@ void showStatistic(list processes, int time){
     int n_process = 0;
     int turn_around_time = 0;
     int wait_time = 0;
-    while(isEmpty(L) == 0){
+    while(isEmptyList(L) == 0){
         process temp = popFirst(&L)->container;
         n_process++;
         turn_around_time += temp.turnaround_time;
@@ -172,10 +172,10 @@ void showStatistic(list processes, int time){
     strcpy(row_val[0], temp);
 
     itoa(wait_time, temp, 4);
-    strcpy(row_val[2], temp);
+    strcpy(row_val[1], temp);
 
     itoa(thoughput, temp, 4);
-    strcpy(row_val[3], temp);
+    strcpy(row_val[2], temp);
 
     addRow(ptr_row_val, &T);
     

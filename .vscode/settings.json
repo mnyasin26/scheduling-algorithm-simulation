@@ -9,6 +9,7 @@
         "utility": "c",
         "time.h": "c",
         "string.h": "c",
-        "table.h": "c"
+        "table.h": "c",
+        "sjfnonpreemptive.h": "c"
     }
 }

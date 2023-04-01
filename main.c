@@ -1,4 +1,8 @@
 #include "header.h"
+#include "RoundRobin/RoundRobin.h"
+#include "SJFNonPreemptive/listGanda.h"
+#include "SJFNonPreemptive/SJFNonPreemptive.h"
+#include "SJFNonPreemptive/table.h"
 
 #define timeDelay 500
 int pilihan = 0;

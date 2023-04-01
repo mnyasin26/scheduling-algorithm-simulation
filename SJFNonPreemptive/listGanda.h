@@ -34,7 +34,7 @@ void createList (list *L);
  */
 int countElement(list L);
 
-int isEmpty(list L);
+int isEmptyList(list L);
 
 
 /**

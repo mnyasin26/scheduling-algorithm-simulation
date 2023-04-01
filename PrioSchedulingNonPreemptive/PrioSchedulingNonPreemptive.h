@@ -1,16 +1,18 @@
 #include <stdio.h>
 #include <string.h>
+#include "../header.h"
+#include "../SJFNonPreemptive/table.h"
 
-typedef struct
-{
-    int pid; // stands for process id
-    int priority; // prioritas proses
-    int arrivalTime;
-    int burstTime;
-    int burstTimeLeft; // burst time left digunakan untuk kegiatan eksekusi
-    int waitTime;
-    int turnAroundTime;
-} process;
+// typedef struct
+// {
+//     int pid; // stands for process id
+//     int priority; // prioritas proses
+//     int arrivalTime;
+//     int burstTime;
+//     int burstTimeLeft; // burst time left digunakan untuk kegiatan eksekusi
+//     int waitTime;
+//     int turnAroundTime;
+// } process;
 
 typedef struct
 {
@@ -37,4 +39,4 @@ process popDel(int index, queue *Q);
 
 // simulation functions
 void simulation(processor *executor, queue *listProcess);
-void executeProcess(process *p, processor *executor, queue *q);
+void executeProcess(process *p, processor *executor, queue *q, table *t);

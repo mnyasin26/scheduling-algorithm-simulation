@@ -158,12 +158,12 @@ void printQueue(queue Q)
         {
             printf("================\n");
             printf("elemen ke : %d\n", i);
-            printf("pid : %d\n", Q.data[i].pid);
+            printf("pid : %d\n", Q.data[i].process_id);
             printf("priority : %d\n", Q.data[i].priority);
-            printf("arrival time : %d\n", Q.data[i].arrivalTime);
-            printf("burst time : %d\n", Q.data[i].burstTime);
-            printf("wait time : %d\n", Q.data[i].waitTime);
-            printf("turn around time : %d\n", Q.data[i].turnAroundTime);
+            printf("arrival time : %d\n", Q.data[i].arrival_time);
+            printf("burst time : %d\n", Q.data[i].burst_time);
+            printf("wait time : %d\n", Q.data[i].waiting_time);
+            printf("turn around time : %d\n", Q.data[i].turnaround_time);
         }
         printf("---------------------\n");
     }
