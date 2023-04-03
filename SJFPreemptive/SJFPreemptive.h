@@ -18,4 +18,3 @@ typedef struct Process {
 void minplus_FJFPreemptive(int x);
 void initProcessSJFP(Process processes[], int n);
 void executeProcessSJFP(Process processes[], int n);
-void printProcessSJFP(Process processes[], int n);

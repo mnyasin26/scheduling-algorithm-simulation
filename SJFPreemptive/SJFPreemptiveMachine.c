@@ -53,9 +53,9 @@ void initProcessSJFP(Process processes[], int n) {
         // set process ID
         processes[i].pid = i + 1;
         // input user (arrival & burst time)
-        printf("Enter arrival time (process %d): ", processes[i].pid);
+        printf("Enter arrival time (%d): ", processes[i].pid);
         scanf("%d", &processes[i].arrivalTime);
-        printf("Enter burst time (process %d): ", processes[i].pid);
+        printf("Enter burst time (%d): ", processes[i].pid);
         scanf("%d", &processes[i].burstTime);
         // set remainning time & flag (true/false completed)
         processes[i].remainingTime = processes[i].burstTime;
@@ -70,7 +70,7 @@ void executeProcessSJFP(Process processes[], int n) {
     int completed = 0;
     int last_completion_time = 0;
     printf("\n");
-    printf("PID\tTime System\n");
+    printf("Time System\tPID\n");
     // loop proceses
     while (completed != n) {
         // range SJF-index&time
@@ -115,7 +115,7 @@ void executeProcessSJFP(Process processes[], int n) {
                 last_completion_time = currentTime;
             }
             // log process status
-            printf("%d\tP%d\n", currentTime, p->pid);
+            printf("%d\t\tP%d\n", currentTime, p->pid);
         }
     }
     printf("\n");
@@ -131,23 +131,16 @@ void executeProcessSJFP(Process processes[], int n) {
     avgWaitingTime /= n;
     avgTurnaroundTime /= n;
     avgResponseTime /= n;
-    // Throughput
     float throughput = (float)n / last_completion_time;
     // Output
-    printProcessSJFP(processes, n);
-    printf("\nAverage Waiting Time: %.2f\n", avgWaitingTime);
-    printf("Average Turnaround Time: %.2f\n", avgTurnaroundTime);
-    printf("Average Response Time: %.2f\n", avgResponseTime);
-    printf("Throughput: %.2f\n", throughput);
-}
-
-/* Procedure to print output all of the processes*/
-void printProcessSJFP(Process processes[], int n) {
     printf("PID\tArrival Time\tBurst Time\tWaiting Time\tTurnaround Time\tResponse Time\n");
     for (int i = 0; i < n; i++) {
         // process sequence
         Process p = processes[i];
-        // output
         printf("P%d\t%d\t\t%d\t\t%d\t\t%d\t\t%d\n", p.pid, p.arrivalTime, p.burstTime, p.waitingTime, p.turnaroundTime, p.responseTime);
     }
+    printf("\nStatistic:\n");
+    printf("Avg. Waiting Time\tAvg. Turnaround Time\tResponse Time\tThroughput\n");
+    printf("%.2f\t\t\t%.2f\t\t\t%.2f\t\t%.2f\n", avgWaitingTime, avgTurnaroundTime, avgResponseTime, throughput);
+    printf("\n");
 }
