@@ -24,7 +24,7 @@ void kekurangan()
     printf("| 2. Throughput rendah : Dikarenakan pemberian jatah waktu       |\n");
     printf("|    yang tetap, throughput rata-rata lebih rendah dari          |\n");
     printf("|    algoritma penjadwalan lain.                                 |\n");
-    printf("| 3. Tidak memprioritaskan proses yang lebih penting            |\n");
+    printf("| 3. Tidak memprioritaskan proses yang lebih penting             |\n");
     printf("| 4. Memakan banyak waktu bila Quantum Timenya kecil.            |\n");
     printf("| 5. Sulit menemukan Quantum Time yang tepat.                    |\n");
     printf("|    diimplementasikan pada sistem                               |\n");
@@ -50,6 +50,7 @@ void RoundRobin()
     avg_tat = average turnarount time*/
     int i, NOP, sum = 0, count = 0, y, quant, wt = 0, tat = 0, at[10], bt[10], temp[10];
     float avg_wt, avg_tat;
+    process proses;
     // kelebihan
     Sleep(800);
     kelebihan();
