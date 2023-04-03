@@ -47,16 +47,15 @@ void minplus_FJFPreemptive(int x) { // gak kepikiran cara buat tabel otomatis ya
     }
 }
 
-
 /* Procedure to initialize an array of n processes */
-void initProcess(Process processes[], int n) {
+void initProcessSJFP(Process processes[], int n) {
     for (int i = 0; i < n; i++) {
         // set process ID
         processes[i].pid = i + 1;
         // input user (arrival & burst time)
-        printf("Enter the arrival time of process %d: ", processes[i].pid);
+        printf("Enter arrival time (process %d): ", processes[i].pid);
         scanf("%d", &processes[i].arrivalTime);
-        printf("Enter the burst time of process %d: ", processes[i].pid);
+        printf("Enter burst time (process %d): ", processes[i].pid);
         scanf("%d", &processes[i].burstTime);
         // set remainning time & flag (true/false completed)
         processes[i].remainingTime = processes[i].burstTime;
@@ -70,6 +69,8 @@ void executeProcessSJFP(Process processes[], int n) {
     int currentTime = 0;
     int completed = 0;
     int last_completion_time = 0;
+    printf("\n");
+    printf("PID\tTime System\n");
     // loop proceses
     while (completed != n) {
         // range SJF-index&time
@@ -113,23 +114,22 @@ void executeProcessSJFP(Process processes[], int n) {
                 completed++;
                 last_completion_time = currentTime;
             }
+            // log process status
+            printf("%d\tP%d\n", currentTime, p->pid);
         }
     }
+    printf("\n");
     // Calculate
     float avgWaitingTime = 0.0;
-    for (int i = 0; i < n; i++) {
-        avgWaitingTime += processes[i].waitingTime;
-    }
-    avgWaitingTime /= n;
     float avgTurnaroundTime = 0.0;
-    for (int i = 0; i < n; i++) {
-        avgTurnaroundTime += processes[i].turnaroundTime;
-    }
-    avgTurnaroundTime /= n;
     float avgResponseTime = 0.0;
     for (int i = 0; i < n; i++) {
+        avgWaitingTime += processes[i].waitingTime;
+        avgTurnaroundTime += processes[i].turnaroundTime;
         avgResponseTime += processes[i].responseTime;
     }
+    avgWaitingTime /= n;
+    avgTurnaroundTime /= n;
     avgResponseTime /= n;
     // Throughput
     float throughput = (float)n / last_completion_time;
@@ -148,6 +148,6 @@ void printProcessSJFP(Process processes[], int n) {
         // process sequence
         Process p = processes[i];
         // output
-        printf("%d\t%d\t\t%d\t\t%d\t\t%d\t\t%d\n", p.pid, p.arrivalTime, p.burstTime, p.waitingTime, p.turnaroundTime, p.responseTime);
+        printf("P%d\t%d\t\t%d\t\t%d\t\t%d\t\t%d\n", p.pid, p.arrivalTime, p.burstTime, p.waitingTime, p.turnaroundTime, p.responseTime);
     }
 }
