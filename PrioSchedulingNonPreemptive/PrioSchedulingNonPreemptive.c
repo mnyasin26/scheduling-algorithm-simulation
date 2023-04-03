@@ -251,9 +251,10 @@ void simulation(processor *executor, queue *listProcess)
     }
 
     // menampilkan status terkahir executor
-    printf("================\n");
-    printf("Executor State\n");
-    printf("system time : %d\n", executor->systemTime);
+    // printf("================\n");
+    // printf("Executor State\n");
+    // printf("system time : %d\n", executor->systemTime);
+    printf("\nStatistics\n");
 
     avgWaitingTime /= processDone.last+1;
     avgTurnAroundTime /= processDone.last+1;
