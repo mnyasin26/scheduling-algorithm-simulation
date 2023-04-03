@@ -115,12 +115,12 @@ void RoundRobin()
         }
     }
     // represents the average waiting time and Turn Around time
-    avg_wt = wt * 1.0 / NOP;
-    avg_tat = tat * 1.0 / NOP;
+    avg_wt = wt / NOP;
+    avg_tat = tat / NOP;
     printf("\n");
     printf("-------------------------------------------------\n");
-    printf("Average Turn Around Time: %f \n", avg_wt);
-    printf("Average Waiting Time: %f \n", avg_tat);
+    printf("Average Turn Around Time: %.2f \n", avg_wt);
+    printf("Average Waiting Time: %.2f \n", avg_tat);
     printf("-------------------------------------------------\n");
     printf("Pencet Tombol apapun untuk kembali ke Menu \n");
     getch();
