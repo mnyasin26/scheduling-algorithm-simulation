@@ -39,17 +39,23 @@ void simulation(processor *executor, queue *listProcess)
     createEmpty(&processDone);
     printQueue(q);
 
-    table TableReadyQueue; // (ready queue)
+    table TableReadyQueue;      // (ready queue)
     table TableTerminatedQueue; // (terminated queue)
-    table TableLogQueue; // (running queue)
+    table TableLogQueue;        // (running queue)
     char colnames[4][100] = {"Process ID", "Priority", "Burst Time", "Arrival Time"};
+    char colnames2[7][100] = {"No.", "Process ID", "Priority", "Burst Time", "Arrival Time", "Waiting Time", "Turn Around Time"};
     char *ptr_colnames[4];
+    char *ptr_colnames2[7];
     for (int i = 0; i < 4; i++)
     {
         ptr_colnames[i] = colnames[i];
     }
+    for (int i = 0; i < 7; i++)
+    {
+        ptr_colnames2[i] = colnames2[i];
+    }
     createTable(ptr_colnames, 4, &TableReadyQueue);
-    createTable(ptr_colnames, 4, &TableTerminatedQueue);
+    createTable(ptr_colnames2, 7, &TableTerminatedQueue);
     char colnamesLog[3][100] = {"Time System", "Process ID", "Burst Time Left"};
     char *ptr_colnamesLog[3];
     for (int i = 0; i < 3; i++)
@@ -65,14 +71,19 @@ void simulation(processor *executor, queue *listProcess)
 
     // variabel bantu
     int state = 0;
+    int state2 = 0;
     process temp1;
     process temp2;
+
+    int number = 1;
 
     // inti pemrosesan
     while (state == 0)
     {
 
         system("cls");
+        printf("System Time: %d\n\n", executor->systemTime);
+
         // cek apakah "new" queue kosong, jika kosong maka cek isinya
         // apakah ada process yang arrival time nya
         // sama atau lebih dari systemTime executor
@@ -84,8 +95,9 @@ void simulation(processor *executor, queue *listProcess)
                 {
                     // jika ada maka masukkan proses tersebut ke "ready" queue, dan keluarkan dari listProcess
                     temp1 = popDel(i, listProcess);
-                    char temp[20];
-                    sprintf(temp, "%d", temp1.process_id);
+                    char temp[50];
+
+                    sprintf(temp, "P%d", temp1.process_id);
                     strcpy(colnames[0], temp);
 
                     sprintf(temp, "%d", temp1.priority);
@@ -100,13 +112,11 @@ void simulation(processor *executor, queue *listProcess)
                     addRow(ptr_colnames, &TableReadyQueue);
                     add(temp1, &q);
 
-                    printf("process P%d arrived\n", temp1.process_id); // tampilkan bahwa process arrived
+                    // printf("process P%d arrived\n", temp1.process_id); // tampilkan bahwa process arrived
                     i--;
                 }
             }
         }
-        printf("Raedy Queue:\n");
-        printTable(&TableReadyQueue);
 
         // jika CPU sedang tidak mengerjakan proses
         // maka ambil process yang memiliki prioritas paling tinggi pada "ready" queue
@@ -117,27 +127,32 @@ void simulation(processor *executor, queue *listProcess)
             {
                 temp2 = popHighestPriority(&q);
                 // delRow(&T);
-                char temp[20];
-            
-                sprintf(temp, "%d", temp2.process_id);
-                strcpy(colnames[0], temp);
+                char temp[50];
 
-                sprintf(temp, "%d", temp2.priority);
-                strcpy(colnames[1], temp);
+                sprintf(temp, "%d", number++);
+                strcpy(colnames2[0], temp);
 
-                sprintf(temp, "%d", temp2.burst_time);
-                strcpy(colnames[2], temp);
-
-                sprintf(temp, "%d", temp2.arrival_time);
-                strcpy(colnames[3], temp);
+                sprintf(temp, "P%d", temp2.process_id);
+                strcpy(colnames2[1], temp);
 
                 delRowByID(&TableReadyQueue, temp);
-                addRow(ptr_colnames, &TableTerminatedQueue);
+
+                sprintf(temp, "%d", temp2.priority);
+                strcpy(colnames2[2], temp);
+
+                sprintf(temp, "%d", temp2.burst_time);
+                strcpy(colnames2[3], temp);
+
+                sprintf(temp, "%d", temp2.arrival_time);
+                strcpy(colnames2[4], temp);
+
+                // printf("test\n");
+
                 executor->state = 0;
             }
         }
-        printf("Terminated Task:\n");
-        printTable(&TableTerminatedQueue);
+        printf("Ready Queue:\n");
+        printTable(&TableReadyQueue);
 
         // pada bagian ini dipastikan bahwa ada proses yang sedang dieksekusi
         // berfungsi untuk memproses proses dengan cara
@@ -145,33 +160,58 @@ void simulation(processor *executor, queue *listProcess)
         // dan menambah +1 wait time dan turn around time untuk proses lainnya
         if (temp2.burstTimeLeft > 0 && executor->state == 0)
         {
-            printf("Running System Log:\n");
+            // printf("Running System Log:\n");
             executeProcess(&temp2, executor, &q, &TableLogQueue); /* code */
-            // printTable(&TableLogQueue);
         }
 
         // jika CPU tidak sedang meksekusi maka tampilkan bahwa "idle"
         if (executor->state == 1)
         {
-            printf("*time: %d no process is executed\n", executor->systemTime);
-            Sleep(1000);
+            printf("\nNo process is executed\n");
         }
+        else
+        {
+            printf("\nCPU is busy\n");
+        }
+        printf("Task Logging:\n");
+        printTable(&TableLogQueue);
 
         // jika process yang sedang dieksekusi tepat sudah selesai maka
         // pindahkan ke terminated queue
+
+        printf("\nTerminated Task:\n");
+        printTable(&TableTerminatedQueue);
         if (temp2.burstTimeLeft == 0 && executor->state == 0)
         {
+            char temp[50];
+            sprintf(temp, "%d", temp2.waiting_time);
+            strcpy(colnames2[5], temp);
+
+            sprintf(temp, "%d", temp2.turnaround_time);
+            strcpy(colnames2[6], temp);
+
+            addRow(ptr_colnames2, &TableTerminatedQueue);
             add(temp2, &processDone);
             executor->state = 1;
         }
+
+        // if (executor->systemTime >= currentTime+1)
+        // {
+
+        // }
 
         // jika new queue dan ready queue kosong, serta CPU sudah tidak mengeksekusi
         // maka tetapkan bahwa semua process sudah dieksekusi
         if (isEmpty(*listProcess) == 1 && isEmpty(q) == 1 && executor->state == 1)
         {
-            state = 1;
+            if (state2 == 1)
+            {
+                state = 1;
+            }
+            state2 = 1;
         }
 
+        Sleep(2000);
         // iterator untuk menambah systemTime +1 agar seakan akan berjalan seiring dengan waktu
         executor->systemTime++;
     }
@@ -191,8 +231,7 @@ void simulation(processor *executor, queue *listProcess)
 void executeProcess(process *p, processor *executor, queue *q, table *t)
 {
     // menampilkan status pemrosesan process yang sedang dieksekusi
-    printf("*time: %d executing process P%d time left = %d\n", executor->systemTime, p->process_id, p->burstTimeLeft);
-    printTable(t);
+    // printf("*time: %d executing process P%d time left = %d\n", executor->systemTime, p->process_id, p->burstTimeLeft);
 
     char colnamesLog[3][100] = {"Time System", "Process ID", "Burst Time Left"};
     char *ptr_colnamesLog[3];
@@ -203,14 +242,14 @@ void executeProcess(process *p, processor *executor, queue *q, table *t)
     char temp[50];
     sprintf(temp, "%d", executor->systemTime);
     strcpy(colnamesLog[0], temp);
-    sprintf(temp, "%d", p->process_id);
+    sprintf(temp, "P%d", p->process_id);
     strcpy(colnamesLog[1], temp);
-    sprintf(temp, "%d", p->burstTimeLeft);
+    sprintf(temp, "%d", --p->burstTimeLeft);
     strcpy(colnamesLog[2], temp);
 
     addRow(ptr_colnamesLog, t);
 
-    p->burstTimeLeft--;   // ini berfungsi untuk mengurangi burstTime, karena sudah "diseksekusi"
+    // p->burstTimeLeft--;   // ini berfungsi untuk mengurangi burstTime, karena sudah "diseksekusi"
     p->turnaround_time++; // menambahkan turn around time
 
     // menambahkan wait time dan turn around time pada semua proses yang ada
@@ -226,5 +265,5 @@ void executeProcess(process *p, processor *executor, queue *q, table *t)
             }
         }
     }
-    Sleep(1000);
+    // printTable(t);
 }

@@ -155,19 +155,21 @@ void createProsessTable(list L, table *T){
 }
 
 void printTable(table *T){
-    
-    if(T->firstRow != NULL){
-        updateMaxColLen(T);
-        printTableLine(T->max_col_len, T->n_col);
-        for(int i = 0 ; i < T->n_col; i++){
-            printf("| %s ", T->colnames[i]);
-            for(int j = 0 ; j < T->max_col_len[i] - strlen(T->colnames[i]); j++){
-                printf(" ");
-            }
-        }
-        printf("|\n");
-        printTableLine(T->max_col_len, T->n_col);
 
+    updateMaxColLen(T);
+    printTableLine(T->max_col_len, T->n_col);
+    for (int i = 0; i < T->n_col; i++)
+    {
+        printf("| %s ", T->colnames[i]);
+        for (int j = 0; j < T->max_col_len[i] - strlen(T->colnames[i]); j++)
+        {
+            printf(" ");
+        }
+    }
+    printf("|\n");
+    printTableLine(T->max_col_len, T->n_col);
+
+    if(T->firstRow != NULL){
         row *ptr = T->firstRow;
         while(ptr != NULL){
             for(int i = 0; i < T->n_col; i++){
