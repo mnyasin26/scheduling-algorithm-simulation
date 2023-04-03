@@ -140,19 +140,24 @@ void PrioSchedulingNonPreemptiveInput()
     printf("Berapa banyak proses: ");
     scanf("%d", &banyakproses);
 
-    process Pp[banyakproses];
+    process Pp[100];
 
     // input dari proses id, priority, arrival dan burst time
     for (int i = 0; i < banyakproses; i++)
     {
         printf("Proses ke-%d\n", i);
+        printf("  Prosed ID : ");
         scanf("%d", &Pp[i].process_id);
+        printf("  Prioritas : ");
         scanf("%d", &Pp[i].priority);
+        printf("  Arrival Time : ");
         scanf("%d", &Pp[i].arrival_time);
+        printf("  Burst Time : ");
         scanf("%d", &Pp[i].burst_time);
-        Pp[i].burstTimeLeft = 0;
+        Pp[i].burstTimeLeft = Pp[i].burst_time;
         Pp[i].waiting_time = 0;
         Pp[i].turnaround_time = 0;
+        Pp[i].response_time = 0;
     }
 
     // set burstimeleft, waiting sama turnaround ke 0
@@ -288,9 +293,9 @@ void simulation(processor *executor, queue *listProcess)
 
                     addRow(ptr_colnames, &TableReadyQueue);
                     add(temp1, &q);
-
                     // printf("process P%d arrived\n", temp1.process_id); // tampilkan bahwa process arrived
                     i--;
+                    break;
                 }
             }
         }
