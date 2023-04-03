@@ -73,7 +73,7 @@ void executeProcessSJFP(Process processes[], int n) {
     printf("PID\tTime System\n");
     // loop proceses
     while (completed != n) {
-        // range SJF-index&time
+        // range SJF-index & time
         int shortest_job_index = -1;
         int shortest_job_time = 999999;
         for (int i = 0; i < n; i++) {
