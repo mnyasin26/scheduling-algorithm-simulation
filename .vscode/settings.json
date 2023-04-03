@@ -10,6 +10,7 @@
         "time.h": "c",
         "string.h": "c",
         "table.h": "c",
-        "sjfnonpreemptive.h": "c"
+        "sjfnonpreemptive.h": "c",
+        "sjfpreemptive.h": "c"
     }
 }
