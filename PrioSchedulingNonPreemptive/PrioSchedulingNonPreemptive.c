@@ -1,6 +1,11 @@
 // #include "../header.h"
 #include "PrioSchedulingNonPreemptive.h"
 
+#define COL_LENGTH_TERMINATED_TASK 8
+#define COL_LENGTH_READY_TASK 4
+#define COL_LENGTH_LOG_TASK 3
+#define COL_LENGTH_STATISTICS 4
+
 void PrioSchedulingNonPreemptive()
 {
 
@@ -8,9 +13,9 @@ void PrioSchedulingNonPreemptive()
     processor executor = {executor.systemTime = 0, executor.state = 1};
 
     // Process p-n adalah perwujudan dari proses dengan berbagai atributnya
-    process p0 = {p0.process_id = 0, p0.priority = 2, p0.burst_time = 2, p0.burstTimeLeft = 0, p0.arrival_time = 0, p0.waiting_time = 0, p0.turnaround_time = 0};
-    process p1 = {p1.process_id = 1, p1.priority = 3, p1.burst_time = 6, p1.burstTimeLeft = 0, p1.arrival_time = 1, p1.waiting_time = 0, p1.turnaround_time = 0};
-    process p2 = {p2.process_id = 2, p2.priority = 1, p2.burst_time = 4, p2.burstTimeLeft = 0, p2.arrival_time = 2, p2.waiting_time = 0, p2.turnaround_time = 0};
+    process p0 = {p0.process_id = 0, p0.priority = 2, p0.burst_time = 2, p0.burstTimeLeft = 0, p0.arrival_time = 0, p0.waiting_time = 0, p0.turnaround_time = 0, p0.response_time = 0};
+    process p1 = {p1.process_id = 1, p1.priority = 3, p1.burst_time = 6, p1.burstTimeLeft = 0, p1.arrival_time = 1, p1.waiting_time = 0, p1.turnaround_time = 0, p1.response_time = 0};
+    process p2 = {p2.process_id = 2, p2.priority = 1, p2.burst_time = 4, p2.burstTimeLeft = 0, p2.arrival_time = 2, p2.waiting_time = 0, p2.turnaround_time = 0, p2.response_time = 0};
 
     // printf("%s",temp);
     // set BurstTimeLeft untuk keperluan pemrosesan
@@ -42,27 +47,35 @@ void simulation(processor *executor, queue *listProcess)
     table TableReadyQueue;      // (ready queue)
     table TableTerminatedQueue; // (terminated queue)
     table TableLogQueue;        // (running queue)
-    char colnames[4][100] = {"Process ID", "Priority", "Burst Time", "Arrival Time"};
-    char colnames2[7][100] = {"No.", "Process ID", "Priority", "Burst Time", "Arrival Time", "Waiting Time", "Turn Around Time"};
-    char *ptr_colnames[4];
-    char *ptr_colnames2[7];
-    for (int i = 0; i < 4; i++)
+    table Stats;                // (Statistics)
+    char colnames[COL_LENGTH_READY_TASK][100] = {"Process ID", "Priority", "Burst Time", "Arrival Time"};
+    char colnames2[COL_LENGTH_TERMINATED_TASK][100] = {"No.", "Process ID", "Priority", "Burst Time", "Arrival Time", "Waiting Time", "Turn Around Time", "Response Time"};
+    char colnamesStats[COL_LENGTH_STATISTICS][100] = {"Throughput", "Avg Response Time", "Avg Waiting TIme", "Avg Turn Around Time"};
+    char *ptr_colnames[COL_LENGTH_READY_TASK];
+    char *ptr_colnames2[COL_LENGTH_TERMINATED_TASK];
+    char *ptr_colnamesStats[COL_LENGTH_STATISTICS];
+    for (int i = 0; i < COL_LENGTH_READY_TASK; i++)
     {
         ptr_colnames[i] = colnames[i];
     }
-    for (int i = 0; i < 7; i++)
+    for (int i = 0; i < COL_LENGTH_TERMINATED_TASK; i++)
     {
         ptr_colnames2[i] = colnames2[i];
     }
-    createTable(ptr_colnames, 4, &TableReadyQueue);
-    createTable(ptr_colnames2, 7, &TableTerminatedQueue);
-    char colnamesLog[3][100] = {"Time System", "Process ID", "Burst Time Left"};
-    char *ptr_colnamesLog[3];
-    for (int i = 0; i < 3; i++)
+    for (int i = 0; i < COL_LENGTH_STATISTICS; i++)
+    {
+        ptr_colnamesStats[i] = colnamesStats[i];
+    }
+    createTable(ptr_colnames, COL_LENGTH_READY_TASK, &TableReadyQueue);
+    createTable(ptr_colnames2, COL_LENGTH_TERMINATED_TASK, &TableTerminatedQueue);
+    createTable(ptr_colnamesStats, COL_LENGTH_STATISTICS, &Stats);
+    char colnamesLog[COL_LENGTH_LOG_TASK][100] = {"Time System", "Process ID", "Burst Time Left"};
+    char *ptr_colnamesLog[COL_LENGTH_LOG_TASK];
+    for (int i = 0; i < COL_LENGTH_LOG_TASK; i++)
     {
         ptr_colnamesLog[i] = colnamesLog[i];
     }
-    createTable(ptr_colnamesLog, 3, &TableLogQueue);
+    createTable(ptr_colnamesLog, COL_LENGTH_LOG_TASK, &TableLogQueue);
 
     printf("Processing Begin\n");
 
@@ -76,6 +89,11 @@ void simulation(processor *executor, queue *listProcess)
     process temp2;
 
     int number = 1;
+
+    float avgWaitingTime = 0.0f;
+    float avgTurnAroundTime = 0.0f;
+    float avgResponseTime = 0.0f;
+    float throughput = 0.0f;
 
     // inti pemrosesan
     while (state == 0)
@@ -167,11 +185,20 @@ void simulation(processor *executor, queue *listProcess)
         // jika CPU tidak sedang meksekusi maka tampilkan bahwa "idle"
         if (executor->state == 1)
         {
-            printf("\nNo process is executed\n");
+            printf("\nStatus: No process is executed\n\n");
+            char temp[50];
+            sprintf(temp, "%d", executor->systemTime);
+            strcpy(colnamesLog[0], temp);
+            sprintf(temp, "-");
+            strcpy(colnamesLog[1], temp);
+            sprintf(temp, "-");
+            strcpy(colnamesLog[2], temp);
+
+            addRow(ptr_colnamesLog, &TableLogQueue);
         }
         else
         {
-            printf("\nCPU is busy\n");
+            printf("\nStatus: CPU is busy\n\n");
         }
         printf("Task Logging:\n");
         printTable(&TableLogQueue);
@@ -186,10 +213,17 @@ void simulation(processor *executor, queue *listProcess)
             char temp[50];
             sprintf(temp, "%d", temp2.waiting_time);
             strcpy(colnames2[5], temp);
+            avgWaitingTime += temp2.waiting_time;
 
             sprintf(temp, "%d", temp2.turnaround_time);
             strcpy(colnames2[6], temp);
+            avgTurnAroundTime += temp2.turnaround_time;
 
+            sprintf(temp, "%d", temp2.response_time);
+            strcpy(colnames2[7], temp);
+            avgResponseTime += temp2.response_time;
+
+            throughput = throughput + 1.0f;
             addRow(ptr_colnames2, &TableTerminatedQueue);
             add(temp2, &processDone);
             executor->state = 1;
@@ -221,6 +255,25 @@ void simulation(processor *executor, queue *listProcess)
     printf("Executor State\n");
     printf("system time : %d\n", executor->systemTime);
 
+    avgWaitingTime /= processDone.last-1;
+    avgTurnAroundTime /= processDone.last-1;
+    avgResponseTime /= processDone.last-1;
+    throughput /= executor->systemTime-1;
+
+    char temp[50];
+    sprintf(temp, "P%d", throughput);
+    strcpy(colnames[0], temp);
+
+    sprintf(temp, "%d", avgResponseTime);
+    strcpy(colnames[1], temp);
+
+    sprintf(temp, "%d", avgWaitingTime);
+    strcpy(colnames[2], temp);
+
+    sprintf(temp, "%d", avgTurnAroundTime);
+    strcpy(colnames[3], temp);
+
+    addRow(ptr_colnamesStats, &Stats);
     // menampilkan status proses yang telah dieksekusi
     printQueue(processDone);
 
@@ -262,6 +315,7 @@ void executeProcess(process *p, processor *executor, queue *q, table *t)
             {
                 q->data[i].waiting_time++;
                 q->data[i].turnaround_time++;
+                q->data[i].response_time++;
             }
         }
     }
