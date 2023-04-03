@@ -255,27 +255,28 @@ void simulation(processor *executor, queue *listProcess)
     printf("Executor State\n");
     printf("system time : %d\n", executor->systemTime);
 
-    avgWaitingTime /= processDone.last-1;
-    avgTurnAroundTime /= processDone.last-1;
-    avgResponseTime /= processDone.last-1;
+    avgWaitingTime /= processDone.last+1;
+    avgTurnAroundTime /= processDone.last+1;
+    avgResponseTime /= processDone.last+1;
     throughput /= executor->systemTime-1;
 
     char temp[50];
-    sprintf(temp, "P%d", throughput);
-    strcpy(colnames[0], temp);
+    sprintf(temp, "%.2f", throughput);
+    strcpy(colnamesStats[0], temp);
 
-    sprintf(temp, "%d", avgResponseTime);
-    strcpy(colnames[1], temp);
+    sprintf(temp, "%.2f", avgResponseTime);
+    strcpy(colnamesStats[1], temp);
 
-    sprintf(temp, "%d", avgWaitingTime);
-    strcpy(colnames[2], temp);
+    sprintf(temp, "%.2f", avgWaitingTime);
+    strcpy(colnamesStats[2], temp);
 
-    sprintf(temp, "%d", avgTurnAroundTime);
-    strcpy(colnames[3], temp);
+    sprintf(temp, "%.2f", avgTurnAroundTime);
+    strcpy(colnamesStats[3], temp);
 
     addRow(ptr_colnamesStats, &Stats);
+    printTable(&Stats);
     // menampilkan status proses yang telah dieksekusi
-    printQueue(processDone);
+    // printQueue(processDone);
 
     int i;
     scanf("%d", &i);
