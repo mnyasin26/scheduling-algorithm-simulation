@@ -210,7 +210,7 @@ void simulation(processor *executor, queue *listProcess)
 
     table TableReadyQueue;      // (ready queue)
     table TableTerminatedQueue; // (terminated queue)
-    table TableLogQueue;        // (running queue)
+    table TableLogQueue;        // (running process)
     table Stats;                // (Statistics)
     char colnames[COL_LENGTH_READY_TASK][100] = {"Process ID", "Priority", "Burst Time", "Arrival Time"};
     char colnames2[COL_LENGTH_TERMINATED_TASK][100] = {"No.", "Process ID", "Priority", "Burst Time", "Arrival Time", "Waiting Time", "Turn Around Time", "Response Time"};

@@ -3,7 +3,9 @@
 // Fungsi untuk menghitung waktu tunggu dan waktu putaran untuk setiap proses
 void calculate_times(process processes[], int num_processes);
 
-void SJFNonPreemptive()
+// void runalgo();
+
+void SJFNonPreemptiveAbandoned()
 {
     int num_processes;
     printf("Masukkan jumlah proses: ");
@@ -33,6 +35,8 @@ void SJFNonPreemptive()
         printf("%d\t\t%d\t\t%d\t\t%d\n", processes[i].process_id, processes[i].burst_time, processes[i].waiting_time, processes[i].turnaround_time);
     }
 
+    // runalgo();
+
     // cleaning
     free(processes);
     // return 0;
@@ -57,7 +61,8 @@ void calculate_times(process processes[], int num_processes)
     printf("Rata-rata waktu turnaround time: %.2f\n", (float)total_turnaround_time / num_processes);
 }
 
-int main (){
+void SJFNonPreemptive()
+{
 
     showUpAndDownside();
 
@@ -68,4 +73,6 @@ int main (){
     n = insert_sjf_process(&L);
 
     simulate_sjf_process_execution(L, n);
+
+    scanf("%d", &n);
 }
