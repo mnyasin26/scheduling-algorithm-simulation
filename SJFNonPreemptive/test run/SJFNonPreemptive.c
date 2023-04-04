@@ -148,7 +148,7 @@ void simulate_sjf_process_execution(list p, int n_process){
 
 }
 
-void showStatistic(list processes, int time){
+void showStatistic(list processes, int waktu){
 
     printf("Statistic\n");
 
@@ -178,9 +178,9 @@ void showStatistic(list processes, int time){
         wait_time += temp.waiting_time;
     }
 
-    double thoughput = n_process / time;
+    double thoughput = (double)n_process / waktu;
 
-    char row_val[3][5];
+    char row_val[3][10];
     char* ptr_row_val[3];
     for(int i = 0 ; i < 3 ; i++){
         ptr_row_val[i] = row_val[i];
@@ -193,7 +193,8 @@ void showStatistic(list processes, int time){
     itoa(wait_time / n_process, temp, 4);
     strcpy(row_val[1], temp);
 
-    snprintf(row_val[2],10, "%0.2f", thoughput);
+    snprintf(temp, 10, "%0.2f", thoughput);
+    strcpy(row_val[2], temp);
 
     addRow(ptr_row_val, &T);
     

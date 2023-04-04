@@ -140,6 +140,7 @@ void simulate_sjf_process_execution(list p, int n_process){
             createProsessTable(finished_queque, &outputTable);
             printTable(&outputTable);
         }
+        printf("\n\n\n");
 
     }
     printf("Pemrosesan selesai\n");
@@ -148,7 +149,7 @@ void simulate_sjf_process_execution(list p, int n_process){
 
 }
 
-void showStatistic(list processes, int time){
+void showStatistic(list processes, int waktu){
 
     printf("Statistic\n");
 
@@ -178,9 +179,10 @@ void showStatistic(list processes, int time){
         wait_time += temp.waiting_time;
     }
 
-    double thoughput = n_process / time;
+    printf("%d %d\n", n_process, waktu);
+    double thoughput = (double)n_process / waktu;
 
-    char row_val[3][5];
+    char row_val[3][10];
     char* ptr_row_val[3];
     for(int i = 0 ; i < 3 ; i++){
         ptr_row_val[i] = row_val[i];
