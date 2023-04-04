@@ -23,15 +23,17 @@ void showUpAndDownside(){
     printTable(&T);
 }
 
-void insert_sjf_process(list *L){
+int insert_sjf_process(list *L){
     int n_process;
     printf("Masukkan jumlah process\n");
     scanf("%d", &n_process);
     process input;
     for(int i = 0 ; i < n_process; i++){
-        printf("Masukkan burst-time dan arrival-time proses ke-%d", i+1);
-        scanf("burst-time  : %d", &input.burst_time);
-        scanf("arrival-time: %d", &input.arrival_time);
+        printf("Masukkan burst-time dan arrival-time proses ke-%d\n", i+1);
+        printf("burst-time  : ");
+        scanf("%d", &input.burst_time);
+        printf("arrival-time: ");
+        scanf("%d", &input.arrival_time);
         input.process_id = i+1;
         input.waiting_time = 0;
         input.turnaround_time = 0;
@@ -71,11 +73,14 @@ void simulate_sjf_process_execution(list p, int n_process){
 
     table outputTable;
 
+    int temp_burst;
+
     while(countElement(finished_queque) != n_process){
         Sleep(1000);
         time_tracker++;
         printf("Time:  %d\n", time_tracker);
 
+        // Add element into the ready queue
         element* check = NULL;
         do{
             check = popByArrivalTime(time_tracker, &processes_list);
@@ -84,18 +89,25 @@ void simulate_sjf_process_execution(list p, int n_process){
             }
         }while(check != NULL);
 
+        //insert process into the running-state
         if(cur_process == NULL){
             cur_process = popFirst(&ready_queue);
+            temp_burst = cur_process->container.burst_time;
         }
+        // Process the state inside the running state
         else{
             if(cur_process->container.burst_time != 0) cur_process->container.burst_time -= 1;
             else{
                 cur_process->container.turnaround_time = time_tracker - cur_process->container.arrival_time;
+                cur_process->container.burst_time = temp_burst;
                 addLast(cur_process->container, &finished_queque);
                 cur_process = NULL;
             }
         }
 
+        updateWaitingTimeForAllElement(1, &ready_queue);
+
+        // If there's a process inisde running-state
         if(cur_process != NULL){
             char cur_table_col[2][25] = {"Current process", "Remaining burst time"};
             char* ptr_cur_table[2];
@@ -104,7 +116,8 @@ void simulate_sjf_process_execution(list p, int n_process){
             char* ptr_cur_table_val[2];
             for(int i = 0 ; i < 2; i++){
                 ptr_cur_table[i] = cur_table_col[i];
-                strcpy(cur_table_val[i], itoa(cur_process->container.process_id, temp_val, 5));
+                strcpy(cur_table_val[0], itoa(cur_process->container.process_id, temp_val, 5));
+                strcpy(cur_table_val[1], itoa(cur_process->container.burst_time, temp_val, 5));
                 ptr_cur_table_val[i] = cur_table_val[i]; 
             }
             createTable(ptr_cur_table, 2, &outputTable);
@@ -112,24 +125,32 @@ void simulate_sjf_process_execution(list p, int n_process){
             printTable(&outputTable);
         }
 
+        //Output the process in ready-state
         delAllRow(&outputTable);
         printf("\nProses dalam ready\n");
-        createProsessTable(ready_queue, &outputTable);
-        printTable(&outputTable);
+        if(isEmpty(ready_queue) == 1) printf("Ready Queue kosong\n");
+        else{
+            createProsessTable(ready_queue, &outputTable);
+            printTable(&outputTable);
+        }
 
         printf("\nProses yang sudah selesai\n");
-        if(isEmpty(finished_queque) == 0) printf("belum ada proses yang selesai");
+        if(isEmpty(finished_queque) == 1) printf("belum ada proses yang selesai\n");
         else{
             createProsessTable(finished_queque, &outputTable);
             printTable(&outputTable);
         }
 
-        updateWaitingTimeForAllElement(1, &ready_queue);
     }
+    printf("Pemrosesan selesai\n");
+
+    showStatistic(finished_queque, time_tracker);
 
 }
 
 void showStatistic(list processes, int time){
+
+    printf("Statistic\n");
 
     table T;
     list L;
@@ -144,7 +165,7 @@ void showStatistic(list processes, int time){
         ptr_colnames[i] = colnames[i];
     }
 
-    createTable(ptr_colnames, 4,&T);
+    createTable(ptr_colnames, 3,&T);
 
     L = processes;
     int n_process = 0;
@@ -166,14 +187,13 @@ void showStatistic(list processes, int time){
     }
 
     char temp[5];
-    itoa(turn_around_time, temp, 4);
+    itoa(turn_around_time / n_process, temp, 4);
     strcpy(row_val[0], temp);
 
-    itoa(wait_time, temp, 4);
-    strcpy(row_val[2], temp);
+    itoa(wait_time / n_process, temp, 4);
+    strcpy(row_val[1], temp);
 
-    itoa(thoughput, temp, 4);
-    strcpy(row_val[3], temp);
+    snprintf(row_val[2],10, "%0.2f", thoughput);
 
     addRow(ptr_row_val, &T);
     

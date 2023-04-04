@@ -24,6 +24,7 @@ typedef struct {
     int arrival_time;
     int waiting_time;
     int turnaround_time;
+    int response_time;
 }process;
 
 void cetakTape(int index, char arr[], char state);

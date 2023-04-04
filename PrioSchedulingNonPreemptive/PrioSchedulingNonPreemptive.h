@@ -38,5 +38,6 @@ process popHighestPriority(queue *Q);
 process popDel(int index, queue *Q);
 
 // simulation functions
+void PrioSchedulingNonPreemptiveInput();
 void simulation(processor *executor, queue *listProcess);
 void executeProcess(process *p, processor *executor, queue *q, table *t);

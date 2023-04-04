@@ -8,6 +8,7 @@ void SJFPreemptive(){
     // Initialize
     int n;
     int opt = 0;
+    
     do {
         printf("===============================\n");
         printf("SHORTEST JOB FIRST - PREEMPTIVE\n");
@@ -36,12 +37,13 @@ void SJFPreemptive(){
                 scanf("%d", &n);
                 // Initialization
                 Process processes[MAX_PROCESS];
-                initProcess(processes, n);
+                initProcessSJFP(processes, n);
                 // Simulation (execution)
                 executeProcessSJFP(processes, n);      
                 break;
             case 4:
                 // exit(0);
+                printf("Back to menu\n");
             default:
                 system("cls");
                 printf("Invalid option!\n");

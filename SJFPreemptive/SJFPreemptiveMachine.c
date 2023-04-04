@@ -1,4 +1,7 @@
 #include "SJFPreemptive.h"
+#include <time.h>
+#include <windows.h>
+#include <conio.h>
 
 void minplus_FJFPreemptive(int x) { // gak kepikiran cara buat tabel otomatis yang ngebungkus text,jadi manual aja wkwk (laah)
     if (x == 0) {
@@ -47,16 +50,15 @@ void minplus_FJFPreemptive(int x) { // gak kepikiran cara buat tabel otomatis ya
     }
 }
 
-
 /* Procedure to initialize an array of n processes */
-void initProcess(Process processes[], int n) {
+void initProcessSJFP(Process processes[], int n) {
     for (int i = 0; i < n; i++) {
         // set process ID
         processes[i].pid = i + 1;
         // input user (arrival & burst time)
-        printf("Enter the arrival time of process %d: ", processes[i].pid);
+        printf("Enter arrival time (%d): ", processes[i].pid);
         scanf("%d", &processes[i].arrivalTime);
-        printf("Enter the burst time of process %d: ", processes[i].pid);
+        printf("Enter burst time (%d): ", processes[i].pid);
         scanf("%d", &processes[i].burstTime);
         // set remainning time & flag (true/false completed)
         processes[i].remainingTime = processes[i].burstTime;
@@ -70,6 +72,8 @@ void executeProcessSJFP(Process processes[], int n) {
     int currentTime = 0;
     int completed = 0;
     int last_completion_time = 0;
+    printf("\n");
+    printf("Time System\tPID\n");
     // loop proceses
     while (completed != n) {
         // range SJF-index&time
@@ -88,8 +92,8 @@ void executeProcessSJFP(Process processes[], int n) {
         }
         // set current time if idle
         if (shortest_job_index == -1) {
-            printf("Idle at time %d\n", currentTime);
             currentTime++;
+            printf("Idle at time %d\n", currentTime);
         }
         // continue
         else {
@@ -113,41 +117,34 @@ void executeProcessSJFP(Process processes[], int n) {
                 completed++;
                 last_completion_time = currentTime;
             }
+            // log process status
+            printf("%d\t\tP%d\n", currentTime, p->pid);
         }
+        Sleep(2000);
     }
+    printf("\n");
     // Calculate
     float avgWaitingTime = 0.0;
-    for (int i = 0; i < n; i++) {
-        avgWaitingTime += processes[i].waitingTime;
-    }
-    avgWaitingTime /= n;
     float avgTurnaroundTime = 0.0;
-    for (int i = 0; i < n; i++) {
-        avgTurnaroundTime += processes[i].turnaroundTime;
-    }
-    avgTurnaroundTime /= n;
     float avgResponseTime = 0.0;
     for (int i = 0; i < n; i++) {
+        avgWaitingTime += processes[i].waitingTime;
+        avgTurnaroundTime += processes[i].turnaroundTime;
         avgResponseTime += processes[i].responseTime;
     }
+    avgWaitingTime /= n;
+    avgTurnaroundTime /= n;
     avgResponseTime /= n;
-    // Throughput
     float throughput = (float)n / last_completion_time;
     // Output
-    printProcessSJFP(processes, n);
-    printf("\nAverage Waiting Time: %.2f\n", avgWaitingTime);
-    printf("Average Turnaround Time: %.2f\n", avgTurnaroundTime);
-    printf("Average Response Time: %.2f\n", avgResponseTime);
-    printf("Throughput: %.2f\n", throughput);
-}
-
-/* Procedure to print output all of the processes*/
-void printProcessSJFP(Process processes[], int n) {
     printf("PID\tArrival Time\tBurst Time\tWaiting Time\tTurnaround Time\tResponse Time\n");
     for (int i = 0; i < n; i++) {
         // process sequence
         Process p = processes[i];
-        // output
-        printf("%d\t%d\t\t%d\t\t%d\t\t%d\t\t%d\n", p.pid, p.arrivalTime, p.burstTime, p.waitingTime, p.turnaroundTime, p.responseTime);
+        printf("P%d\t%d\t\t%d\t\t%d\t\t%d\t\t%d\n", p.pid, p.arrivalTime, p.burstTime, p.waitingTime, p.turnaroundTime, p.responseTime);
     }
+    printf("\nStatistic:\n");
+    printf("Avg. Waiting Time\tAvg. Turnaround Time\tResponse Time\tThroughput\n");
+    printf("%.2f\t\t\t%.2f\t\t\t%.2f\t\t%.2f\n", avgWaitingTime, avgTurnaroundTime, avgResponseTime, throughput);
+    printf("\n");
 }

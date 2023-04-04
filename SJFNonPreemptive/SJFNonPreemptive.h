@@ -8,7 +8,7 @@
 
 void showUpAndDownside();
 
-void insert_sjf_Process(list *L);
+int insert_sjf_process(list *L);
 
 /**
  * @brief mengurutkan array of processes
