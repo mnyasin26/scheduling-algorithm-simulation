@@ -56,3 +56,16 @@ void calculate_times(process processes[], int num_processes)
     printf("Rata-rata waiting time: %.2f\n", (float)total_waiting_time / num_processes);
     printf("Rata-rata waktu turnaround time: %.2f\n", (float)total_turnaround_time / num_processes);
 }
+
+int main (){
+
+    showUpAndDownside();
+
+    list L;
+    createList(&L);
+
+    int n;
+    n = insert_sjf_process(&L);
+
+    simulate_sjf_process_execution(L, n);
+}
