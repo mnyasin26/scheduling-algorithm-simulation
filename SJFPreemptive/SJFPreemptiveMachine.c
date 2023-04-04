@@ -1,4 +1,7 @@
 #include "SJFPreemptive.h"
+#include <time.h>
+#include <windows.h>
+#include <conio.h>
 
 void minplus_FJFPreemptive(int x) { // gak kepikiran cara buat tabel otomatis yang ngebungkus text,jadi manual aja wkwk (laah)
     if (x == 0) {
@@ -89,8 +92,8 @@ void executeProcessSJFP(Process processes[], int n) {
         }
         // set current time if idle
         if (shortest_job_index == -1) {
-            printf("Idle at time %d\n", currentTime);
             currentTime++;
+            printf("Idle at time %d\n", currentTime);
         }
         // continue
         else {
@@ -117,6 +120,7 @@ void executeProcessSJFP(Process processes[], int n) {
             // log process status
             printf("%d\t\tP%d\n", currentTime, p->pid);
         }
+        Sleep(2000);
     }
     printf("\n");
     // Calculate

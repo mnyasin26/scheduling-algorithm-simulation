@@ -367,9 +367,9 @@ void simulation(processor *executor, queue *listProcess)
         printf("Task Logging:\n");
         printTable(&TableLogQueue);
 
+
         // jika process yang sedang dieksekusi tepat sudah selesai maka
         // pindahkan ke terminated queue
-
         printf("\nTerminated Task:\n");
         printTable(&TableTerminatedQueue);
         if (temp2.burstTimeLeft == 0 && executor->state == 0)
