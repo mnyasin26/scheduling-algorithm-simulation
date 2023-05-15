@@ -128,14 +128,14 @@ void simulate_sjf_process_execution(list p, int n_process){
         //Output the process in ready-state
         delAllRow(&outputTable);
         printf("\nProses dalam ready\n");
-        if(isEmpty(ready_queue) == 1) printf("Ready Queue kosong\n");
+        if(isEmptyList(ready_queue) == 1) printf("Ready Queue kosong\n");
         else{
             createProsessTable(ready_queue, &outputTable);
             printTable(&outputTable);
         }
 
         printf("\nProses yang sudah selesai\n");
-        if(isEmpty(finished_queque) == 1) printf("belum ada proses yang selesai\n");
+        if(isEmptyList(finished_queque) == 1) printf("belum ada proses yang selesai\n");
         else{
             createProsessTable(finished_queque, &outputTable);
             printTable(&outputTable);
@@ -172,7 +172,7 @@ void showStatistic(list processes, int waktu){
     int n_process = 0;
     int turn_around_time = 0;
     int wait_time = 0;
-    while(isEmpty(L) == 0){
+    while(isEmptyList(L) == 0){
         process temp = popFirst(&L)->container;
         n_process++;
         turn_around_time += temp.turnaround_time;
