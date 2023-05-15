@@ -18,10 +18,13 @@
  */
 typedef struct {
     int process_id;
+    int priority; // prioritas proses
     int burst_time;
+    int burstTimeLeft; // buat priority scheduling
     int arrival_time;
     int waiting_time;
     int turnaround_time;
+    int response_time;
 }process;
 
 void cetakTape(int index, char arr[], char state);
